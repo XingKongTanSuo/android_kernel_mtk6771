@@ -98,8 +98,6 @@ jobs:
         export TARGET_PRODUCT=full_oppo6771_${{ github.event.inputs.device }}
         export OPPO_TARGET_DEVICE=oppo6771_${{ github.event.inputs.device }}
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc64/bin:$GITHUB_WORKSPACE/kernel_workspace/gcc32/bin:$PATH
-        export KBUILD_BUILD_HOST=企鹅交流:722651738
-        export KBUILD_BUILD_USER=kuan-jsbsbxjxh66
         make -s -j$(nproc --all) O=out ARCH=arm64 oppo6771_${{ github.event.inputs.device }}_defconfig
         make -j$(nproc --all) CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-
                 
@@ -113,15 +111,13 @@ jobs:
         
 
     
-    - name: 上传卡刷包
-      uses: actions/upload-artifact@v4
+    - name: 上传卡刷包 kernel
+      uses: softprops/action-gh-release@v2
       with:
-        name: mtk6771-${{ github.event.inputs.device }}-Anykernel3
-        path: kernel_workspace/android-kernel/out/arch/arm64/boot/anykernel3/*
-        
-
-    - name: 上传编译内核
-      uses: actions/upload-artifact@v4
-      with:
+        files: |
+           kernel_workspace/android-kernel/out/arch/arm64/boot/anykernel3/*
+           kernel_workspace/android-kernel/out/arch/arm64/boot/*
         name: mtk6771-${{ github.event.inputs.device }}-kernel
-        path: kernel_workspace/android-kernel/out/arch/arm64/boot/*
+        tag_name: ${{ github.run_id }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
