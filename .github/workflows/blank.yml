@@ -117,6 +117,7 @@ jobs:
         files: |
            kernel_workspace/android-kernel/out/arch/arm64/boot/anykernel3/*
            kernel_workspace/android-kernel/out/arch/arm64/boot/*
+           kernel_workspace/android-kernel/out/arch/arm64/boot/dts/mediatek/*
         name: mtk6771-${{ github.event.inputs.device }}-kernel
         tag_name: ${{ github.run_id }}
       env:
